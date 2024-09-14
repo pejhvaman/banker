@@ -1,0 +1,476 @@
+:root {
+  --primary-color: #e44f44;
+  --primary-color-darker: #b63f36;
+  --primary-color-opacity: #e44f44d5;
+  --secondary-color: #329c6b;
+  --secondary-color-darker: #236d4a;
+  --secondary-color-opacity: #329c6bb2;
+  --tertiary-color: #fcaf04;
+  --tertiary-color-darker: #ca8a01;
+  --tertiary-color-opacity: #fcad04bd;
+  --primary-gradient: linear-gradient(to top right, #573362, #fda8bf);
+  --secondary-gradient: linear-gradient(to top, #329c6b, #329c6bb2);
+  --tertiary-gradient: linear-gradient(to top, #fcaf04, #fcad04bd);
+  --fourth-gradient: linear-gradient(to top, #e44f44, #e44f44d5);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d2e0e9;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b0cad6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  line-height: 1.2;
+  color: rgb(101, 114, 126);
+  background: var(--primary-gradient);
+  min-height: 100vh;
+  max-height: max-content;
+  transition: background 0.4s linerar;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: aliceblue;
+  border-radius: 24px;
+  padding: 2rem;
+  width: 96%;
+  display: felx;
+  flex-direction: column;
+  align-items: center;
+  height: 96vh;
+  max-height: max-content;
+  min-height: 96vh;
+  box-shadow: 0px 2px 14px 3px #84314d;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.message {
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.logo {
+  display: block;
+  width: 64px;
+  opacity: 0.7;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 1;
+}
+
+.login {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+
+.login input {
+  all: unset;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+#username,
+#password {
+  border-radius: 8px;
+  border: 1px solid rgba(176, 196, 222, 0.507);
+  width: 4rem;
+  margin-right: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+#username:focus,
+#password:focus {
+  color: inherit;
+}
+
+#username::placeholder,
+#password::placeholder {
+  color: rgba(160, 164, 168, 0.692);
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.error-message {
+  color: var(--primary-color);
+  letter-spacing: 1px;
+  font-size: 0.7rem;
+  position: absolute;
+  width: 90%;
+  overflow: hidden;
+  text-wrap: nowrap;
+  top: -1rem;
+  left: 0.4rem;
+}
+
+.login-btn {
+  all: unset;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(157, 168, 172);
+  cursor: pointer;
+}
+
+.logout {
+  all: unset;
+  border: 1px solid rgba(176, 196, 222, 0.507);
+  border-radius: 8px;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+}
+
+.enter {
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
+  position: absolute;
+  right: 0;
+}
+.enter-login,
+.enter-signup {
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.9;
+  font-weight: 500;
+}
+.enter-login {
+  color: var(--secondary-color);
+}
+.enter-login:hover,
+.enter-signup:hover {
+  opacity: 1;
+}
+
+.enter-login:active,
+.enter-signup:active {
+  color: var(--primary-color-opacity);
+}
+
+.signup-msg {
+  letter-spacing: 1px;
+  font-size: 0.6rem;
+  position: absolute;
+  bottom: -1rem;
+  left: 0.4rem;
+}
+
+.main {
+  width: 66%;
+  max-height: 66%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reports {
+  width: 55%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.current {
+  margin-bottom: 1rem;
+}
+
+.current-balance-wrapper {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.date {
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.transactions {
+  border: 1px solid rgba(203, 215, 231, 0.507);
+  list-style: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: rgb(242, 246, 247);
+  border-radius: 6px;
+  padding-left: 4px;
+  max-height: 400px;
+}
+
+.transaction {
+  height: 3rem;
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid rgba(213, 223, 236, 0.507);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.transactions:last-child {
+  border-bottom: unset;
+}
+
+.transaction-label {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.6rem;
+  padding-top: 0.2rem;
+  border-radius: 24px;
+  color: aliceblue;
+  vertical-align: middle;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.deposit .transaction-label {
+  background: var(--fourth-gradient);
+}
+.withdrawal .transaction-label {
+  background: var(--secondary-gradient);
+}
+
+.transaction-value {
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  width: 40%;
+}
+
+.action {
+  color: rgb(45, 51, 51);
+  width: 96%;
+  height: 32%;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.transfer {
+  background: var(--secondary-gradient);
+}
+
+.loan {
+  background: var(--tertiary-gradient);
+}
+
+.close {
+  background: var(--fourth-gradient);
+}
+
+.action-title {
+  margin-bottom: 0.7rem;
+}
+
+.action-input {
+  display: flex;
+  justify-content: space-around;
+}
+
+.action-input input {
+  all: unset;
+  width: 36%;
+  margin-left: 0.5rem;
+  border-radius: 8px;
+  background: rgba(240, 248, 255, 0.534);
+  padding: 0.2rem 0.7rem;
+  color: rgb(45, 51, 51);
+  font-weight: 600;
+}
+
+.action-input input:focus {
+  background: rgba(240, 248, 255, 0.733);
+}
+
+.action-input button {
+  all: unset;
+  width: 10%;
+  flex-grow: 1;
+  cursor: pointer;
+  margin-left: 0.2rem;
+  font-weight: 800;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.action-label {
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+}
+.loan label {
+  flex-grow: 1;
+  margin-left: 2rem;
+}
+
+.loan label {
+  align-self: flex-start;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem;
+}
+
+.summary p {
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  align-content: center;
+  text-align: center;
+}
+
+.summary span {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.sort {
+  all: unset;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  opacity: 0.8;
+  text-align: center;
+}
+.sort:hover {
+  opacity: 1;
+}
+
+.footer {
+  width: 90%;
+  padding: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.timer {
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+@media (max-width: 1024px) {
+  .main {
+    width: 86%;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    min-height: unset;
+    max-height: unset;
+    padding: 0.3rem;
+  }
+
+  .container {
+    padding: 1rem;
+    width: 100%;
+    height: fit-content;
+  }
+  .main {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .main section {
+    width: 100%;
+    padding: 0;
+  }
+
+  .current-balance-wrapper {
+    font-size: 1rem;
+  }
+
+  .transaction-label {
+    font-size: 0.5rem;
+  }
+
+  .transactions:last-child {
+    border-bottom: unset;
+  }
+
+  .transactions {
+    max-height: 200px;
+  }
+
+  .transaction {
+    height: 2rem;
+  }
+
+  .message {
+    display: none;
+  }
+  #username,
+  #password {
+    width: 3rem;
+  }
+
+  .actions {
+    margin-top: 1rem;
+  }
+  .action {
+    width: 90%;
+    margin: 0.5rem;
+  }
+}

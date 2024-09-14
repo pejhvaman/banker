@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bankist</title>
+    <link rel="icon" href="icon.png" type="image/icon png" />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <p class="message">Login to start</p>
+        <img class="logo" src="logo.png" alt="Logo" />
+        <form class="login hidden">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="user"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="pin"
+            required
+          />
+          <button class="login-btn">&rarr;</button>
+          <p class="error-message"></p>
+          <p class="signup-msg">
+            create accont: <span class="enter-signup">signup</span>
+          </p>
+        </form>
+        <p class="enter">
+          <span class="enter-login">login</span> /
+          <span class="enter-signup">signup</span>
+        </p>
+        <button class="logout hidden">Logout</button>
+      </header>
+      <main class="main">
+        <section class="reports">
+          <header class="current">
+            <p class="current-balance-wrapper">
+              Current balance: <span class="current-balance">2.3443$</span>
+            </p>
+            <p class="date">
+              As of <span class="current-date">2024/08/13</span>
+            </p>
+          </header>
+          <ul class="transactions">
+            <li class="transaction deposit">
+              <span class="transaction-label">1 deposit</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction withdrawal">
+              <span class="transaction-label">2 withdrawal</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction deposit">
+              <span class="transaction-label">1 deposit</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction withdrawal">
+              <span class="transaction-label">2 withdrawal</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction deposit">
+              <span class="transaction-label">1 deposit</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction withdrawal">
+              <span class="transaction-label">2 withdrawal</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction deposit">
+              <span class="transaction-label">1 deposit</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+            <li class="transaction withdrawal">
+              <span class="transaction-label">2 withdrawal</span>
+              <span class="transaction-value">1334$</span>
+            </li>
+          </ul>
+          <footer class="summary">
+            <p>
+              in
+              <span class="income"> 444544$ </span>
+            </p>
+            <p>
+              out
+              <span class="outcome"> 454444$ </span>
+            </p>
+            <p>
+              interest
+              <span class="income"> 455544$ </span>
+            </p>
+            <button class="sort">&darr; sort</button>
+          </footer>
+        </section>
+        <section class="actions">
+          <form class="action transfer">
+            <h3 class="action-title">Transfer money</h3>
+            <div class="action-input">
+              <input
+                class="input"
+                type="text"
+                name="transfer-to"
+                id="transfer-to"
+                required
+              />
+              <input
+                type="number"
+                name="transfer-amount"
+                id="transfer-amount"
+                required
+              />
+              <button class="action-btn transfer-btn">&rarr;</button>
+            </div>
+            <div class="action-label">
+              <label for="transfer-to">Transfer to</label>
+              <label for="transfer-amount">Amount</label>
+            </div>
+          </form>
+          <form class="action loan">
+            <h3 class="action-title">Request loan</h3>
+            <div class="action-input">
+              <input type="text" name="loan-amount" id="loan-amount" required />
+              <button class="action-btn loan-btn">&rarr;</button>
+            </div>
+            <div class="action-label">
+              <label for="loan-amount">Amount</label>
+            </div>
+          </form>
+          <form class="action close">
+            <h3 class="action-title">Close account</h3>
+            <div class="action-input">
+              <input
+                type="text"
+                name="user-to-close"
+                id="user-to-close"
+                required
+              />
+              <input
+                type="password"
+                name="pass-to-close"
+                id="pass-to-close"
+                required
+              />
+              <button class="action-btn close-btn">&rarr;</button>
+            </div>
+            <div class="action-label">
+              <label for="user-to-close">Confirm user</label>
+              <label for="pass-to-close">Confim pin</label>
+            </div>
+          </form>
+        </section>
+      </main>
+      <footer class="footer">
+        <p class="timer-wrapper">
+          You will be logged out in <span class="timer">05:00</span>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
