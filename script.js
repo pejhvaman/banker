@@ -50,10 +50,12 @@ const timerEl = document.querySelector(".timer-wrapper");
 const transferToInput = document.getElementById("transfer-to");
 const transferAmountInput = document.getElementById("transfer-amount");
 const transferBtn = document.querySelector(".transfer-btn");
-const transferCard = document.querySelector(".transfer");
 const loanAmountInput = document.getElementById("loan-amount");
 const loanCard = document.querySelector(".loan");
 const requestLoanBtn = document.querySelector(".loan-btn");
+const closeUserInput = document.getElementById("user-to-close");
+const closePassInput = document.getElementById("pass-to-close");
+const closeAccBtn = document.querySelector(".close-btn");
 // Important Variables
 let currentAccount;
 
@@ -228,6 +230,13 @@ const handleLogin = function (e) {
   console.log(pass);
 };
 
+const handleLogout = function () {
+  const sure = prompt(`Are you sure?
+    (Yes/No)`);
+  if (sure.toLowerCase() === "yes") init();
+  else return;
+};
+
 const handleTransfer = function (e) {
   e.preventDefault();
   const transferToAcc = transferToInput.value;
@@ -259,23 +268,7 @@ const handleTransfer = function (e) {
   }
 };
 
-// Function calls
-createUsernames();
-init();
-
-// NOTE fake login
-handleLoginLogic("py", "1111");
-
-// Event handlers
-enterEL.addEventListener("click", handleEnter);
-
-loginBtn.addEventListener("click", handleLogin);
-
-logoutBtn.addEventListener("click", init);
-
-transferBtn.addEventListener("click", handleTransfer);
-
-requestLoanBtn.addEventListener("click", function (e) {
+const handleLoan = function (e) {
   e.preventDefault();
   const loanAmount = loanAmountInput.value;
   clearBlurInputs(loanAmountInput);
@@ -293,4 +286,53 @@ requestLoanBtn.addEventListener("click", function (e) {
     currentAccount.movements.push(+loanAmount);
     updateUI(currentAccount);
   } else return renderActionMsg(undefined, "loan");
-});
+};
+
+const handleCloseAccount = function (e) {
+  e.preventDefault();
+  const closeUser = closeUserInput.value;
+  const closePin = closePassInput.value;
+  clearBlurInputs(closeUserInput, closePassInput);
+
+  if (
+    closeUser &&
+    closePin &&
+    closeUser === currentAccount.username &&
+    +closePin === currentAccount.pin
+  ) {
+    console.log("valid");
+    const sure = prompt(`Are you sure?
+          (Yes/No)`);
+    if (sure.toLowerCase() === "yes") {
+      renderActionMsg("🧧Your account has been closed.", "close");
+      accounts.splice(
+        accounts.findIndex((acc) => acc.username === closeUser),
+        1
+      );
+      setTimeout(init, 3000);
+    } else return;
+  } else {
+    console.log("invalid");
+    return renderActionMsg(undefined, "close");
+  }
+};
+
+// Function calls
+createUsernames();
+init();
+
+// fake login
+// handleLoginLogic("py", "1111");
+
+// Event handlers
+enterEL.addEventListener("click", handleEnter);
+
+loginBtn.addEventListener("click", handleLogin);
+
+logoutBtn.addEventListener("click", handleLogout);
+
+transferBtn.addEventListener("click", handleTransfer);
+
+requestLoanBtn.addEventListener("click", handleLoan);
+
+closeAccBtn.addEventListener("click", handleCloseAccount);
