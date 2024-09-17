@@ -32,32 +32,34 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 // Elements
-const enterEL = document.querySelector(".enter");
-const loginForm = document.querySelector(".login");
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const loginBtn = document.querySelector(".login-btn");
-const errMsgEl = document.querySelector(".error-message");
-const app = document.querySelector(".main");
-const movementsEl = document.querySelector(".transactions");
-const currentBalance = document.querySelector(".current-balance");
-const incomeEl = document.querySelector(".income");
-const outgoEl = document.querySelector(".outgo");
-const interestEl = document.querySelector(".interest");
-const messageEl = document.querySelector(".message");
-const logoutBtn = document.querySelector(".logout");
-const timerEl = document.querySelector(".timer-wrapper");
-const transferToInput = document.getElementById("transfer-to");
-const transferAmountInput = document.getElementById("transfer-amount");
-const transferBtn = document.querySelector(".transfer-btn");
-const loanAmountInput = document.getElementById("loan-amount");
-const loanCard = document.querySelector(".loan");
-const requestLoanBtn = document.querySelector(".loan-btn");
-const closeUserInput = document.getElementById("user-to-close");
-const closePassInput = document.getElementById("pass-to-close");
-const closeAccBtn = document.querySelector(".close-btn");
+const enterEL = document.querySelector(".enter"),
+  loginForm = document.querySelector(".login"),
+  usernameInput = document.getElementById("username"),
+  passwordInput = document.getElementById("password"),
+  loginBtn = document.querySelector(".login-btn"),
+  errMsgEl = document.querySelector(".error-message"),
+  app = document.querySelector(".main"),
+  movementsEl = document.querySelector(".transactions"),
+  currentBalance = document.querySelector(".current-balance"),
+  incomeEl = document.querySelector(".income"),
+  outgoEl = document.querySelector(".outgo"),
+  interestEl = document.querySelector(".interest"),
+  messageEl = document.querySelector(".message"),
+  logoutBtn = document.querySelector(".logout"),
+  timerEl = document.querySelector(".timer-wrapper"),
+  transferToInput = document.getElementById("transfer-to"),
+  transferAmountInput = document.getElementById("transfer-amount"),
+  transferBtn = document.querySelector(".transfer-btn"),
+  loanAmountInput = document.getElementById("loan-amount"),
+  loanCard = document.querySelector(".loan"),
+  requestLoanBtn = document.querySelector(".loan-btn"),
+  closeUserInput = document.getElementById("user-to-close"),
+  closePassInput = document.getElementById("pass-to-close"),
+  closeAccBtn = document.querySelector(".close-btn"),
+  sortBtn = document.querySelector(".sort");
 // Important Variables
-let currentAccount;
+let currentAccount,
+  sort = false;
 
 // Helper functions
 const createUsernames = function () {
@@ -67,9 +69,7 @@ const createUsernames = function () {
   });
 };
 
-const renderErrorMsg = function (msg = "") {
-  errMsgEl.textContent = msg;
-};
+const renderErrorMsg = (msg = "") => (errMsgEl.textContent = msg);
 
 const renderLoginError = function (user, pass) {
   if (!user && !pass) return renderErrorMsg("Enter your info.");
@@ -77,9 +77,8 @@ const renderLoginError = function (user, pass) {
   if (pass && !user) return renderErrorMsg("Enter your username.");
 };
 
-const showHeaderMsg = function (msg = "Login to start...") {
-  messageEl.textContent = msg;
-};
+const showHeaderMsg = (msg = "Login to start...") =>
+  (messageEl.textContent = msg);
 
 const showApp = () => {
   app.classList.remove("hidden");
@@ -121,12 +120,19 @@ const clearBlurInputs = function (...inputs) {
   });
 };
 
-const showMovements = function (currentAccount) {
+const showMovements = function (currentAccount, sort = false) {
   movementsEl.innerHTML = "";
-  currentAccount.movements.forEach((mov, i) => {
+
+  const movsArr = currentAccount.movements;
+  const movsMap = new Map();
+  movsArr.forEach((mov, i) => movsMap.set(mov, i + 1));
+  const sortedMovs = movsArr.slice().sort((a, b) => a - b);
+  const movements = sort ? sortedMovs : movsArr;
+
+  movements.forEach((mov) => {
     const movRow = `
             <li class="transaction ${mov > 0 ? "deposit" : "withdrawal"}">
-              <span class="transaction-label">${i + 1} ${
+              <span class="transaction-label">${movsMap.get(mov)} ${
       mov > 0 ? "deposit" : "withdrawal"
     }</span>
               <span class="transaction-value">${mov} $</span>
@@ -169,7 +175,7 @@ const updateUI = function (currentAccount) {
   calcDisplaySummary(currentAccount);
 };
 
-const handleLoginLogic = function (user, pass) {
+const takeCareLogin = function (user, pass) {
   if (user && pass) {
     renderErrorMsg();
     // login logic
@@ -224,10 +230,7 @@ const handleLogin = function (e) {
 
   renderLoginError(user, pass);
 
-  handleLoginLogic(user, pass);
-
-  console.log(user);
-  console.log(pass);
+  takeCareLogin(user, pass);
 };
 
 const handleLogout = function () {
@@ -317,12 +320,16 @@ const handleCloseAccount = function (e) {
   }
 };
 
+const handleSort = function () {
+  showMovements(currentAccount, !sort);
+  sort = !false;
+};
 // Function calls
 createUsernames();
 init();
 
 // fake login
-// handleLoginLogic("py", "1111");
+takeCareLogin("py", "1111");
 
 // Event handlers
 enterEL.addEventListener("click", handleEnter);
@@ -336,3 +343,5 @@ transferBtn.addEventListener("click", handleTransfer);
 requestLoanBtn.addEventListener("click", handleLoan);
 
 closeAccBtn.addEventListener("click", handleCloseAccount);
+
+sortBtn.addEventListener("click", handleSort);
