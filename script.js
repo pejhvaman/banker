@@ -47,6 +47,10 @@ const interestEl = document.querySelector(".interest");
 const messageEl = document.querySelector(".message");
 const logoutBtn = document.querySelector(".logout");
 const timerEl = document.querySelector(".timer-wrapper");
+const transferToInput = document.getElementById("transfer-to");
+const transferAmountInput = document.getElementById("transfer-amount");
+const transferBtn = document.querySelector(".transfer-btn");
+const transferCard = document.querySelector(".transfer");
 
 // Important Variables
 let currentAccount;
@@ -104,6 +108,13 @@ const init = function () {
 
   // reset app msg
   showHeaderMsg();
+};
+
+const clearBlurInputs = function (...inputs) {
+  inputs.forEach((input) => {
+    input.value = "";
+    input.blur();
+  });
 };
 
 const showMovements = function (currentAccount) {
@@ -170,7 +181,7 @@ const handleLoginLogic = function (user, pass) {
     showApp();
 
     // clear inputs
-    usernameInput.value = passwordInput.value = "";
+    clearBlurInputs(usernameInput, passwordInput);
 
     // hide entry and login and show logout btn
     loginForm.classList.add("hidden");
@@ -183,6 +194,14 @@ const handleLoginLogic = function (user, pass) {
     //show timer
     showTimer();
   }
+};
+
+const renderActionMsg = function (msg = "🔴Enter valid values!", action) {
+  const errEL = `<p class="error-action">${msg}</p>`;
+  document.querySelector(`.${action}`).insertAdjacentHTML("afterbegin", errEL);
+  setTimeout(() => {
+    document.querySelector(".error-action").remove();
+  }, 2000);
 };
 
 // Handler functions
@@ -207,12 +226,42 @@ const handleLogin = function (e) {
   console.log(pass);
 };
 
+const handleTransfer = function (e) {
+  e.preventDefault();
+  const transferToAcc = transferToInput.value;
+  const transferAmount = transferAmountInput.value;
+  clearBlurInputs(transferToInput, transferAmountInput);
+
+  console.log(transferToAcc, transferAmount);
+
+  if (
+    transferAmount &&
+    transferToAcc &&
+    transferToAcc !== currentAccount.username &&
+    +transferAmount > 0 &&
+    currentAccount.movements.reduce((bal, cur) => bal + cur, 0) >
+      +transferAmount &&
+    accounts.some((acc) => acc.username === transferToAcc)
+  ) {
+    console.log("valid");
+    currentAccount.movements.push(-+transferAmount);
+    updateUI(currentAccount);
+    accounts
+      .find((acc) => acc.username === transferToAcc)
+      .movements.push(+transferAmount);
+    return;
+  } else {
+    console.log("invalid");
+    return renderActionMsg(undefined, "transfer");
+  }
+};
+
 // Function calls
 createUsernames();
 init();
 
 // NOTE fake login
-handleLoginLogic("py", "1111");
+// handleLoginLogic("py", "1111");
 
 // Event handlers
 enterEL.addEventListener("click", handleEnter);
@@ -220,3 +269,5 @@ enterEL.addEventListener("click", handleEnter);
 loginBtn.addEventListener("click", handleLogin);
 
 logoutBtn.addEventListener("click", init);
+
+transferBtn.addEventListener("click", handleTransfer);

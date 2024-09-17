@@ -86,15 +86,15 @@
           </ul>
           <footer class="summary">
             <p>
-              in
+              in <br />
               <span class="income"> 444544$ </span>
             </p>
             <p>
-              out
+              out <br />
               <span class="outgo"> 454444$ </span>
             </p>
             <p>
-              interest
+              interest <br />
               <span class="interest"> 455544$ </span>
             </p>
             <button class="sort">&darr; sort</button>
@@ -102,6 +102,7 @@
         </section>
         <section class="actions">
           <form class="action transfer">
+            <!-- <p class="error-action">🔴Enter valid values!</p> -->
             <h3 class="action-title">Transfer money</h3>
             <div class="action-input">
               <input
@@ -112,7 +113,7 @@
                 required
               />
               <input
-                type="number"
+                type=""
                 name="transfer-amount"
                 id="transfer-amount"
                 required
@@ -125,6 +126,8 @@
             </div>
           </form>
           <form class="action loan">
+            <!-- <p class="error-action">🔴Enter valid values!</p> -->
+
             <h3 class="action-title">Request loan</h3>
             <div class="action-input">
               <input type="text" name="loan-amount" id="loan-amount" required />
@@ -135,6 +138,8 @@
             </div>
           </form>
           <form class="action close">
+            <!-- <p class="error-action">🔴Enter valid values!</p> -->
+
             <h3 class="action-title">Close account</h3>
             <div class="action-input">
               <input
