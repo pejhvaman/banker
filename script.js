@@ -51,7 +51,9 @@ const transferToInput = document.getElementById("transfer-to");
 const transferAmountInput = document.getElementById("transfer-amount");
 const transferBtn = document.querySelector(".transfer-btn");
 const transferCard = document.querySelector(".transfer");
-
+const loanAmountInput = document.getElementById("loan-amount");
+const loanCard = document.querySelector(".loan");
+const requestLoanBtn = document.querySelector(".loan-btn");
 // Important Variables
 let currentAccount;
 
@@ -244,6 +246,7 @@ const handleTransfer = function (e) {
     accounts.some((acc) => acc.username === transferToAcc)
   ) {
     console.log("valid");
+    renderActionMsg("🟢Transfer done.", "transfer");
     currentAccount.movements.push(-+transferAmount);
     updateUI(currentAccount);
     accounts
@@ -261,7 +264,7 @@ createUsernames();
 init();
 
 // NOTE fake login
-// handleLoginLogic("py", "1111");
+handleLoginLogic("py", "1111");
 
 // Event handlers
 enterEL.addEventListener("click", handleEnter);
@@ -271,3 +274,23 @@ loginBtn.addEventListener("click", handleLogin);
 logoutBtn.addEventListener("click", init);
 
 transferBtn.addEventListener("click", handleTransfer);
+
+requestLoanBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  const loanAmount = loanAmountInput.value;
+  clearBlurInputs(loanAmountInput);
+  console.log(+loanAmount);
+  if (
+    loanAmount &&
+    currentAccount.movements
+      .filter((mov) => mov > 0)
+      .some((mov) => mov > +loanAmount * 0.1) &&
+    +loanAmount <
+      5 * currentAccount.movements.reduce((bal, cur) => bal + cur, 0)
+  ) {
+    console.log("valid: loan accepted");
+    renderActionMsg("🟢Loan accepted.", "loan");
+    currentAccount.movements.push(+loanAmount);
+    updateUI(currentAccount);
+  } else return renderActionMsg(undefined, "loan");
+});
