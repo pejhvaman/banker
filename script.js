@@ -140,12 +140,21 @@ const simpleDater = (dateObj) => {
   return `${year}/${month}/${day}`;
 };
 
-const displayCurrentDate = () => {
-  const date = simpleDater(new Date());
-  currentDateEl.textContent = date;
+const produceFormattedDate = (locale, date) => {
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  const formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+  // currentDateEl.textContent = formattedDate;
+  return formattedDate;
 };
 
-displayCurrentDate();
+const displayCurrentDate = (locale, date) => {
+  currentDateEl.textContent = produceFormattedDate(locale, date);
+};
 
 const calcDaysPassed = (date1, date2) =>
   Math.round(Math.abs(date1 - date2) / (24 * 60 * 60 * 1000));
@@ -156,7 +165,19 @@ const movmentDateString = (date) => {
   if (day === 1) return "yesterday";
   if (day > 1 && day < 7) return `${day} days ago`;
   if (day === 7) return "a week ago";
-  else return simpleDater(date);
+  else return produceFormattedDate(currentAccount.locale, date);
+};
+
+const numberFormatter = function (locale, currency, number) {
+  const options = {
+    style: "currency",
+    currency: currency,
+    currencyDisplay: "code",
+    // useGrouping: false,
+  };
+
+  const formattedNum = new Intl.NumberFormat(locale, options).format(number);
+  return formattedNum;
 };
 
 const showMovements = function (currentAccount, sort = false) {
@@ -172,7 +193,6 @@ const showMovements = function (currentAccount, sort = false) {
 
   const movements = sort ? sortedMovs : movsArr;
 
-  //date
   const movDates = currentAccount.movementsDates;
 
   movements.forEach((mov) => {
@@ -193,7 +213,11 @@ const showMovements = function (currentAccount, sort = false) {
 
 const calcDisplayBalance = function (currentAccount) {
   const balance = currentAccount.movements.reduce((bal, cur) => bal + cur, 0);
-  currentBalance.textContent = `${balance} $`;
+  currentBalance.textContent = numberFormatter(
+    currentAccount.locale,
+    currentAccount.currency,
+    balance
+  );
 };
 
 const calcDisplaySummary = function (currentAccount) {
@@ -222,6 +246,9 @@ const updateUI = function (currentAccount) {
 
   // calc & display summary
   calcDisplaySummary(currentAccount);
+
+  //display date
+  displayCurrentDate(currentAccount.locale, new Date());
 };
 
 const takeCareLogin = function (user, pass) {
