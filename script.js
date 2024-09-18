@@ -124,9 +124,13 @@ const showMovements = function (currentAccount, sort = false) {
   movementsEl.innerHTML = "";
 
   const movsArr = currentAccount.movements;
+
   const movsMap = new Map();
+
   movsArr.forEach((mov, i) => movsMap.set(mov, i + 1));
+
   const sortedMovs = movsArr.slice().sort((a, b) => a - b);
+
   const movements = sort ? sortedMovs : movsArr;
 
   movements.forEach((mov) => {
@@ -322,7 +326,7 @@ const handleCloseAccount = function (e) {
 
 const handleSort = function () {
   showMovements(currentAccount, !sort);
-  sort = !false;
+  sort = !sort;
 };
 // Function calls
 createUsernames();
