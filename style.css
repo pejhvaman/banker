@@ -220,11 +220,6 @@ body {
   font-weight: 600;
 }
 
-.current-balance {
-  font-style: italic;
-  /* direction: ; */
-}
-
 .date {
   font-size: 0.7rem;
   letter-spacing: 0.5px;

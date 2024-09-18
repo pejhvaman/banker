@@ -172,11 +172,15 @@ const numberFormatter = function (locale, currency, number) {
   const options = {
     style: "currency",
     currency: currency,
-    currencyDisplay: "code",
+    // currencyDisplay: "code",
     // useGrouping: false,
   };
 
-  const formattedNum = new Intl.NumberFormat(locale, options).format(number);
+  const formattedNum = new Intl.NumberFormat(locale, options)
+    .format(number)
+    .replace("ریال", "ت")
+    .replaceAll(" ", "")
+    .trim();
   return formattedNum;
 };
 
@@ -204,7 +208,11 @@ const showMovements = function (currentAccount, sort = false) {
               <span class="transaction-date">${movmentDateString(
                 new Date(movDates[movsMap.get(mov)])
               )}</span>
-              <span class="transaction-value">${mov.toFixed(2)} $</span>
+              <span class="transaction-value">${numberFormatter(
+                currentAccount.locale,
+                currentAccount.currency,
+                mov
+              )}</span>
             </li>
         `;
     movementsEl.insertAdjacentHTML("afterbegin", movRow);
@@ -213,28 +221,31 @@ const showMovements = function (currentAccount, sort = false) {
 
 const calcDisplayBalance = function (currentAccount) {
   const balance = currentAccount.movements.reduce((bal, cur) => bal + cur, 0);
-  currentBalance.textContent = numberFormatter(
+  currentBalance.textContent = `${numberFormatter(
     currentAccount.locale,
     currentAccount.currency,
     balance
-  );
+  )}`;
 };
 
 const calcDisplaySummary = function (currentAccount) {
+  const locale = currentAccount.locale;
+  const currency = currentAccount.currency;
+
   const income = currentAccount.movements
     .filter((mov) => mov > 0)
     .reduce((inc, cur) => inc + cur, 0);
-  incomeEl.textContent = `${income.toFixed(2)} $`;
+  incomeEl.textContent = `${numberFormatter(locale, currency, income)}`;
   const outgo = currentAccount.movements
     .filter((mov) => mov < 0)
     .reduce((out, cur) => out + cur, 0);
-  outgoEl.textContent = `${Math.abs(outgo).toFixed(2)} $`;
+  outgoEl.textContent = `${numberFormatter(locale, currency, Math.abs(outgo))}`;
   const interest = currentAccount.movements
     .filter((mov) => mov > 0)
     .map((dep) => (dep * currentAccount.interestRate) / 100)
     .filter((int) => int >= 1)
     .reduce((int, cur) => int + cur, 0);
-  interestEl.textContent = `${interest.toFixed(2)} $`;
+  interestEl.textContent = `${numberFormatter(locale, currency, interest)}`;
 };
 
 const updateUI = function (currentAccount) {
@@ -405,6 +416,7 @@ createUsernames();
 init();
 
 // fake login
+// takeCareLogin("am", "2222");
 takeCareLogin("py", "1111");
 
 // Event handlers
