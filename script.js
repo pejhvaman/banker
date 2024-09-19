@@ -429,6 +429,9 @@ const handleCloseAccount = function (e) {
   const closePin = closePassInput.value;
   clearBlurInputs(closeUserInput, closePassInput);
 
+  if (timer) clearInterval(timer);
+  timer = startLogoutTimer();
+
   if (
     closeUser &&
     closePin &&
