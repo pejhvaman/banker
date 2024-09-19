@@ -466,7 +466,6 @@ createUsernames();
 init();
 
 // fake login
-// takeCareLogin("am", "2222");
 // takeCareLogin("py", "1111");
 
 // Event handlers
