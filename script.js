@@ -59,6 +59,7 @@ const enterEL = document.querySelector(".enter"),
   messageEl = document.querySelector(".message"),
   logoutBtn = document.querySelector(".logout"),
   timerEl = document.querySelector(".timer-wrapper"),
+  timerDigitsEl = document.querySelector(".timer"),
   transferToInput = document.getElementById("transfer-to"),
   transferAmountInput = document.getElementById("transfer-amount"),
   transferBtn = document.querySelector(".transfer-btn"),
@@ -72,7 +73,8 @@ const enterEL = document.querySelector(".enter"),
   currentDateEl = document.querySelector(".current-date");
 // Important Variables
 let currentAccount,
-  sort = false;
+  sort = false,
+  timer;
 
 // Helper functions
 const createUsernames = function () {
@@ -159,13 +161,13 @@ const displayCurrentDate = (locale, date) => {
 const calcDaysPassed = (date1, date2) =>
   Math.round(Math.abs(date1 - date2) / (24 * 60 * 60 * 1000));
 
-const movmentDateString = (date) => {
+const movmentDateString = (locale, date) => {
   const day = calcDaysPassed(date, new Date());
   if (day === 0) return "today";
   if (day === 1) return "yesterday";
   if (day > 1 && day < 7) return `${day} days ago`;
   if (day === 7) return "a week ago";
-  else return produceFormattedDate(currentAccount.locale, date);
+  else return produceFormattedDate(locale, date);
 };
 
 const numberFormatter = function (locale, currency, number) {
@@ -197,7 +199,7 @@ const showMovements = function (currentAccount, sort = false) {
 
   const movements = sort ? sortedMovs : movsArr;
 
-  const movDates = currentAccount.movementsDates;
+  const movDates = currentAccount.movementsDates.map((date) => new Date(date));
 
   movements.forEach((mov) => {
     const movRow = `
@@ -206,7 +208,8 @@ const showMovements = function (currentAccount, sort = false) {
       mov > 0 ? "deposit" : "withdrawal"
     }</span>
               <span class="transaction-date">${movmentDateString(
-                new Date(movDates[movsMap.get(mov)])
+                currentAccount.locale,
+                movDates[movsMap.get(mov)]
               )}</span>
               <span class="transaction-value">${numberFormatter(
                 currentAccount.locale,
@@ -290,15 +293,41 @@ const takeCareLogin = function (user, pass) {
 
     //show timer
     showTimer();
+
+    // reset timer
+    if (timer) clearInterval(timer);
+    timer = startLogoutTimer();
   }
 };
 
 const renderActionMsg = function (msg = "🔴Enter valid values!", action) {
   const errEL = `<p class="error-action">${msg}</p>`;
   document.querySelector(`.${action}`).insertAdjacentHTML("afterbegin", errEL);
-  setTimeout(() => {
+  const actionMsgTimer = setTimeout(() => {
     document.querySelector(".error-action").remove();
+    clearTimeout(actionMsgTimer);
   }, 2000);
+};
+
+const startLogoutTimer = function () {
+  let time = 100;
+
+  const tick = function () {
+    if (time === 0) {
+      clearInterval(logoutTimer);
+      init();
+    }
+    const minute = `${Math.floor(time / 60)}`.padStart(2, 0);
+    const second = `${time % 60}`.padStart(2, 0);
+    timerDigitsEl.textContent = `${minute}:${second}`;
+    time--;
+  };
+
+  tick();
+
+  const logoutTimer = setInterval(tick, 1000);
+
+  return logoutTimer;
 };
 
 // Handler functions
@@ -323,8 +352,10 @@ const handleLogin = function (e) {
 const handleLogout = function () {
   const sure = prompt(`Are you sure?
     (Yes/No)`);
-  if (sure.toLowerCase() === "yes") init();
-  else return;
+  if (sure.toLowerCase() === "yes") {
+    if (timer) clearInterval(timer);
+    init();
+  } else return;
 };
 
 const handleTransfer = function (e) {
@@ -333,7 +364,8 @@ const handleTransfer = function (e) {
   const transferAmount = transferAmountInput.value;
   clearBlurInputs(transferToInput, transferAmountInput);
 
-  console.log(transferToAcc, transferAmount);
+  if (timer) clearInterval(timer);
+  timer = startLogoutTimer();
 
   if (
     transferAmount &&
@@ -346,11 +378,17 @@ const handleTransfer = function (e) {
   ) {
     console.log("valid");
     renderActionMsg("🟢Transfer done.", "transfer");
+
     currentAccount.movements.push(-+transferAmount);
+    currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
-    accounts
-      .find((acc) => acc.username === transferToAcc)
-      .movements.push(+transferAmount);
+
+    const transferToAccount = accounts.find(
+      (acc) => acc.username === transferToAcc
+    );
+    transferToAccount.movements.push(+transferAmount);
+    transferToAccount.movementsDates.push(new Date().toISOString());
+
     return;
   } else {
     console.log("invalid");
@@ -362,7 +400,9 @@ const handleLoan = function (e) {
   e.preventDefault();
   const loanAmount = loanAmountInput.value;
   clearBlurInputs(loanAmountInput);
-  console.log(+loanAmount);
+  if (timer) clearInterval(timer);
+  timer = startLogoutTimer();
+
   if (
     loanAmount &&
     currentAccount.movements
@@ -374,7 +414,12 @@ const handleLoan = function (e) {
     console.log("valid: loan accepted");
     renderActionMsg("🟢Loan accepted.", "loan");
     currentAccount.movements.push(+loanAmount);
-    updateUI(currentAccount);
+    currentAccount.movementsDates.push(new Date().toISOString());
+
+    const loanTimer = setTimeout(() => {
+      updateUI(currentAccount);
+      clearTimeout(loanTimer);
+    }, 5000);
   } else return renderActionMsg(undefined, "loan");
 };
 
@@ -399,7 +444,10 @@ const handleCloseAccount = function (e) {
         accounts.findIndex((acc) => acc.username === closeUser),
         1
       );
-      setTimeout(init, 3000);
+      const closeTimer = setTimeout(() => {
+        init();
+        clearTimeout(closeTimer);
+      }, 3000);
     } else return;
   } else {
     console.log("invalid");
@@ -408,6 +456,8 @@ const handleCloseAccount = function (e) {
 };
 
 const handleSort = function () {
+  if (timer) clearInterval(timer);
+  timer = startLogoutTimer();
   showMovements(currentAccount, !sort);
   sort = !sort;
 };
@@ -417,7 +467,7 @@ init();
 
 // fake login
 // takeCareLogin("am", "2222");
-takeCareLogin("py", "1111");
+// takeCareLogin("py", "1111");
 
 // Event handlers
 enterEL.addEventListener("click", handleEnter);
